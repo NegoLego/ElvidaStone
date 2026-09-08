@@ -1,4 +1,4 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html lang=en>
 <head>
   <title>Elvida Stone</title>
@@ -11,4 +11,30 @@
   <div style="background-color: #aaaaaa;">
     <p>Hai salut!</p>
   </div>
+  <!-- Gallery container -->
+  <div id="gallery" class="gallery-grid"></div>
+
+  <script>
+    fetch('/data/gallery.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('gallery');
+        if (!data.items || data.items.length === 0) {
+          container.innerHTML = '<p>No photos uploaded yet.</p>';
+          return;
+       }
+
+        container.innerHTML = data.items.map(item => `
+         <figure class="gallery-item">
+           <img src="${item.image}" alt="${item.title}" loading="lazy" />
+           <figcaption>
+             <strong>${item.title}</strong>
+             ${item.description ? `<p>${item.description}</p>` : ''}
+           </figcaption>
+         </figure>
+          `).join('');
+        })
+    .catch(err => console.error('Error loading gallery:', err));
+  </script>
 </body>
+</html>
