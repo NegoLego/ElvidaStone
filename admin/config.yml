@@ -5,7 +5,7 @@ backend:
   base_url: https://elvidastone.pages.dev
   auth_endpoint: api/auth
 
-# where files uploaded via the CMS are saced in your repo
+# where files uploaded via the CMS are saved in your repo
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
