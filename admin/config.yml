@@ -10,18 +10,25 @@ media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
-  - name: "gallery"
-    label: "Photo Gallery"
-    files:
-      - label: "Gallery Photos"
-        name: "photos"
-        file: "data/gallery.json"
+  - name: "categories"
+    label: "Categorii produse"
+    folder: "data/categories"
+    create: true
+    format: "json"
+    identifier_field: "category_name"
+    fields:
+      - {name: "category_name", label: "Numele categoriei", widget: "string"}
+      - {name: "image", label: "Poza categoriei", widget: "image"}
+      - name: "items"
+        label: "Produse"
+        widget: "list"
+        summary: "{{fields.title}}"
         fields:
-          - label: "Photo List"
-            name: "items"
+          - {name: "title", label: "Nume", widget: "string"}
+          - {name: "image", label: "Poza principala", widget: "image"}
+          - name: "gallery"
+            label: "Poze"
             widget: "list"
-            summary: "{{fields.title}} - {{fields.image}}"
-            fields:
-              - { label: "Title / Caption", name: "title", widget: "string"}
-              - { label: "Image", name: "image", widget: "image" }
-              - { label: "Description (Optional)", name: "description", widget: "text", required: false }
+            required: false
+            field: {name: "image", label: "poza", widget: "image"}
+

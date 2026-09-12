@@ -6,30 +6,29 @@
 </head>
 <body>
   <div style="background-color: #222222; color: white">
-    <p>Buna ziua tuturor!</p>
-  </div>
-  <div style="background-color: #aaaaaa;">
-    <p>Hai salut!</p>
+    <p>PAGINA DE CATEOGRII</p>
   </div>
   <!-- Gallery container/ changed something to recommit -->
   <div id="gallery" class="gallery-grid"></div>
 
   <script>
-    fetch('/data/category-list.json')
+    const params = new URLSearchParams(window.location.search);
+    const categorySlug = params.get('c');
+
+    fetch(`/data/categories/${categorySlug}.json`)
       .then(res => res.json())
-      .then(categoryList => {
+      .then(products => {
         const container = document.getElementById('gallery');
-        if (categoryList.length === 0) {
+        if (!products.items || products.items.length === 0) {
           container.innerHTML = '<p>No photos uploaded yet.</p>';
           return;
        }
 
-        container.innerHTML = categoryList.map(item => `
+        container.innerHTML = products.items.map(item => `
          <figure class="gallery-item">
            <img src="${item.image}" alt="${item.title}" loading="lazy" />
            <figcaption>
              <strong>${item.title}</strong>
-             <a href="/category.html?c=${item.slug}"></a> 
            </figcaption>
          </figure>
           `).join('');
