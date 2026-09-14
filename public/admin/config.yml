@@ -24,10 +24,15 @@ collections:
         widget: "list"
         summary: "{{fields.title}}"
         fields:
-          - {name: "title", label: "Nume", widget: "string"}
-          - name: "images"
-            label: "Poze"
+          - {name: "title", label: "Nume produs", widget: "string"}
+          - name: "versions"
+            label: "Variante"
             widget: "list"
-            required: false
-            field: {name: "image", label: "poza", widget: "image"}
+            fields:
+              - {name: "title", label: "Nume varianta", widget: "string"}
+              - name: "images"
+                label: "Poze"
+                widget: "list"
+                required: false
+                field: {name: "image", label: "poza", widget: "image"}
 
