@@ -1,0 +1,19 @@
+---
+import Baselayout from '../layouts/Baselayout.astro';
+import CardContainer from '../components/CardContainer.astro';
+
+const categoryFiles = import.meta.glob<{category_name: string, image: string}>('../../data/categories/*.json', {eager: true});
+
+const categories = Object.entries(categoryFiles).map(([path, category]) => ({
+  title: category.category_name,
+  image: category.image,
+  link: path.split('/').pop()?.replace('.json', '') ?? ''
+}));
+---
+
+<Baselayout pageTitle="ElvidaStone">
+  <main>
+    <h1>Onoram memoria cu eleganta</h1>
+    <CardContainer items={categories} />
+  </main>
+</Baselayout>

@@ -1,0 +1,31 @@
+---
+interface Item {
+  title: string,
+  image: string,
+  link: string
+}
+
+interface Props {
+  items: Item[]
+}
+
+const { items } = Astro.props as Props; // HAS: title, image, link
+---
+
+<div class="container">
+  {items.map(item => (
+    <div class="card">
+      <a href={item.link}>{item.title}</a>
+      <img src={item.image} />
+    </div>
+  ))}
+</div>
+
+<style>
+  .container {
+    display: flex;
+  }
+  .card {
+    width: 200px;
+  }
+</style>

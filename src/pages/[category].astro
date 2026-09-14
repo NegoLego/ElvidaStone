@@ -1,0 +1,38 @@
+---
+import Baselayout from '../layouts/Baselayout.astro';
+import CardContainer from '../components/CardContainer.astro';
+
+interface Category {
+  category_name: string,
+  items: {
+    title: string,
+    versions: {
+      title: string,
+      images: string[]
+    }[]
+  }[]
+}
+
+export function getStaticPaths() {
+  const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', {eager: true});
+  
+  return Object.entries(categoryFiles).map(([path, category]) => {
+    const slug = path.split('/').pop()?.replace('.json', '') ?? '';
+
+    return {
+      params: {category: slug},
+      props: {products: category.items.map(product => ({title: product.title, image: product.versions[0].images[0], link: slug}))}
+    }
+  });
+}
+
+const { category } = Astro.params;
+const { products } = Astro.props;
+---
+
+<Baselayout pageTitle={category.title}>
+  <main>
+  
+  <CardContainer items={products} />
+  </main>
+</Baselayout>
