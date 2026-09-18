@@ -31,7 +31,7 @@ collections:
             widget: "list"
             fields:
               - {name: "title", label: "Nume varianta", widget: "string"}
-              - {name: "description", label: "Descriere", widget: "text"}
+              - {name: "description", label: "Descriere", widget: "markdown"}
               - name: "images"
                 label: "Poze"
                 widget: "list"

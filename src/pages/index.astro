@@ -14,7 +14,7 @@ const categories = Object.entries(categoryFiles).map(([path, category]) => ({
 <Baselayout pageTitle="Elvida Stone">
   <>
     <img src="/images/static/bkgPlaceholder.jpeg" />
-    <h1>Elvida Stone - Onoram memoria cu eleganta</h1>
+    <h1>Elvida Stone - Onorăm memoria cu eleganță</h1>
     <h2>Importatori direcți de piatră naturală premium de o calitate excepțională</h2>
     <CardContainer items={categories} title='Categoriile noastre' />
     <div class="vertical-split" />
@@ -34,16 +34,27 @@ h1, h2 {
   color: white;
   z-index: 1;
   text-align: center;
-  font-family: serif;
-  font-weight: 100;
-  text-shadow: 0 0 10px black;
+
 }
 h1 {
-  font-size: 3em;
+  font-family: 'Cormorant Garamond', Garamond, Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.75rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  line-height: 1.15;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   margin-top: 1.7em;
   margin-bottom: 0.5em;
 }
 h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: #e5e7eb;
+  line-height: 1.6;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   margin-top: 1em;
   margin-bottom: 2em;
 }

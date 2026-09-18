@@ -13,7 +13,6 @@ const projects = data?.projects ?? [];
 
 <Baselayout pageTitle={"Lucrări realizate"}>
   <div class="category-header-wrapper">
-
     <header class="category-header">
       <div class="accent-bar" aria-hidden="true"></div>
       <div class="header-text">
@@ -23,16 +22,24 @@ const projects = data?.projects ?? [];
     </header>
   </div>
 
-  {projects.map((p) => (
-    <section>
-      {p.images?.map((image) => (
-        <img src={image} />
-      ))}
-    </section>
-  ))}
+  <div class="projects-container">
+    {projects.map((p) => (
+      <section class="project-strip">
+        {p.images?.map((image) => (
+          <img src={image} alt="Lucrare Elvida Stone" class="project-image" loading="lazy" />
+        ))}
+      </section>
+    ))}
+  </div>
 </Baselayout>
 
 <style>
+  :root {
+    --accent-gold: #c5a059;
+    --card-bg: #ffffff;
+    --border-subtle: rgba(0, 0, 0, 0.06);
+  }
+
   .category-header-wrapper {
     max-width: 1200px;
     margin: 0 auto;
@@ -75,5 +82,66 @@ const projects = data?.projects ?? [];
     line-height: 1.5;
     margin: 0;
     max-width: 75ch;
+  }
+
+  .projects-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    box-sizing: border-box;
+  }
+
+  .project-strip {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Constrain images within the horizontal scroll */
+  .project-image {
+    height: 280px;
+    width: auto;
+    max-width: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  /* Subtle Custom Scrollbar */
+  .project-strip::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .project-strip::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .project-strip::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 3px;
+  }
+
+  .project-strip::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+
+  @media (max-width: 640px) {
+    .project-image {
+      height: 220px;
+    }
   }
 </style>
