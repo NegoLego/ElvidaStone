@@ -1,6 +1,5 @@
 {
   "category_name": "Granit",
-  "description": "Piatra texturata foarte rezistenta.",
   "image": "/images/uploads/screenshot-2026-09-09_13-15-06.png",
   "items": [
     {
@@ -15,5 +14,6 @@
         }
       ]
     }
-  ]
+  ],
+  "description": "Piatra texturata foarte rezistenta."
 }
