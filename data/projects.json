@@ -1,3 +1,15 @@
 {
-
+  "projects": [
+    {
+      "images": [
+        "/images/uploads/screenshot-2026-09-07_19-43-20.png",
+        "/images/uploads/screenshot-2026-09-07_21-56-13.png"
+      ]
+    },
+    {
+      "images": [
+        "/images/uploads/screenshot-2026-09-14_16-56-52.png"
+      ]
+    }
+  ]
 }
