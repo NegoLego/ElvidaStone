@@ -21,7 +21,7 @@ const { items, title } = Astro.props as Props;
       items.map((item) => (
         /* Static wrapper intercepts hover to prevent jitter */
         <div class="card-anchor">
-          <a href={item.link} class="card">
+      <a href={'/' + item.link} class="card">
             <div class="image-wrapper">
               <img src={item.image} alt={item.title} class="card-image" />
             </div>
