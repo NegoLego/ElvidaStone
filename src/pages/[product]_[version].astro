@@ -1,13 +1,23 @@
 ---
 import Baselayout from "../layouts/Baselayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import type { Category } from '../types/types';
 import { getSlug } from '../utils/utils';
+
+interface Version {
+  title: string,
+  slug: string,
+  image: string,
+  link: string
+}
 
 export function getStaticPaths() {
   const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', { eager: true });
 
-  return Object.values(categoryFiles).flatMap(category =>
-    category.items.flatMap(item =>
+  return Object.entries(categoryFiles).flatMap(([path, category]) => {
+    const categorySlug = path.split('/').pop()?.replace('.json', '') ?? getSlug(category.category_name);
+
+    return category.items.flatMap(item =>
       item.versions.map(version => ({
         params: {
           product: getSlug(item.title),
@@ -15,32 +25,307 @@ export function getStaticPaths() {
         },
         props: {
           categoryName: category.category_name,
+          categorySlug: categorySlug,
           productName: item.title,
+          productSlug: getSlug(item.title),
           versionName: version.title,
+          versionDescription: version.description ?? item.description ?? '',
           images: version.images,
-          productVersions: item.versions.map(v => getSlug(v.title)),
-          versionsImages: item.versions.map(v => v.images[0]),
+          versions: item.versions.map(v => ({
+            title: v.title,
+            slug: getSlug(v.title),
+            image: v.images[0],
+            link: `/${getSlug(item.title)}_${getSlug(v.title)}`
+          })),
         },
       }))
-    )
-  );
+    );
+  });
 }
 
-const { categoryName, productName, versionName, images } = Astro.props;
+const { 
+  categoryName, 
+  categorySlug, 
+  productName, 
+  versionName, 
+  versionDescription, 
+  images, 
+  versions 
+} = Astro.props;
 ---
 
+<Baselayout pageTitle={`${productName} - ${versionName}`}>
+  <div class="page-wrapper">
+    <Breadcrumbs 
+      destination={`${productName} - ${versionName}`}
+      extra-path={{
+        title: categoryName,
+        link: `/${categorySlug}`
+      }}
+    />
 
+    <main class="product-card">
+      <h1 class="product-title">{productName}</h1>
 
-<Baselayout pageTitle={productName + ' - ' + versionName}>
-  <main>
-    <p>
-      You are in category: {categoryName}.
-    </p>
-    <div>
-    {(images as string[]).map(image => (
-      <img src={image} />
-    ))} 
-    </div>
-  </main>
+      <div class="product-content-grid">
+        <!-- Left Column: Gallery -->
+        <section class="gallery-column">
+          <div class="main-image-viewport">
+            <img 
+              id="main-image" 
+              src={images[0]} 
+              alt={`${productName} - ${versionName}`} 
+              loading="eager"
+            />
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="thumbnail-strip" role="region" aria-label="Galerie imagini">
+            {images.map((img: string, index: number) => (
+              <button 
+                type="button"
+                class:list={['thumb-btn', { active: index === 0 }]}
+                data-image={img}
+                aria-label={`Selectează imaginea ${index + 1}`}
+              >
+                <img src={img} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <!-- Right Column: Versions & Details -->
+        <section class="details-column">
+          <h2 class="section-label">Variante disponibile:</h2>
+          
+          <div class="versions-list">
+            {versions.map(v => {
+              const isActive = v.title === versionName;
+              return (
+                <a 
+                  href={v.link} 
+                  class:list={['version-chip', { active: isActive }]}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {v.image && <img src={v.image} alt="" class="version-thumb" />}
+                  <span>{v.title}</span>
+                </a>
+              );
+            })}
+          </div>
+
+          <div class="divider"></div>
+
+          {versionDescription && (
+            <div class="version-description">
+              <p>{versionDescription}</p>
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
+  </div>
 </Baselayout>
 
+<script>
+  function setupGallery() {
+    const mainImage = document.getElementById('main-image') as HTMLImageElement | null;
+    const thumbnails = document.querySelectorAll<HTMLButtonElement>('.thumb-btn');
+
+    thumbnails.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nextSrc = btn.dataset.image;
+        if (!mainImage || !nextSrc || mainImage.src === nextSrc) return;
+
+        mainImage.src = nextSrc;
+        thumbnails.forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  }
+
+  setupGallery();
+  document.addEventListener('astro:after-swap', setupGallery);
+</script>
+
+<style>
+  :root {
+    --accent-gold: #c5a059;
+    --accent-gold-hover: #b8860b;
+    --card-bg: #ffffff;
+    --border-subtle: #e5e7eb;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4b5563;
+  }
+
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 0 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 2.5rem;
+    box-sizing: border-box;
+  }
+
+  .product-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 2rem 0;
+    line-height: 1.2;
+  }
+
+  .product-content-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .product-content-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--border-subtle);
+    margin: 1.5rem 0;
+    width: 100%;
+  }
+
+  /* Left Column: Gallery */
+  .gallery-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-image-viewport {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9fafb;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .main-image-viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .thumbnail-strip {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .thumb-btn {
+    width: 72px;
+    height: 72px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .thumb-btn:hover {
+    border-color: #d1d5db;
+  }
+
+  .thumb-btn.active {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 1px var(--accent-gold);
+  }
+
+  /* Right Column: Versions & Description */
+  .details-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-label {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+  }
+
+  .versions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .version-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    background-color: #fafafa;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .version-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .version-chip:hover {
+    border-color: var(--accent-gold);
+    color: var(--text-primary);
+    background-color: #ffffff;
+  }
+
+  .version-chip.active {
+    border-color: var(--accent-gold);
+    background-color: #fdfbf7;
+    color: #926615;
+    font-weight: 600;
+    box-shadow: 0 0 0 1px var(--accent-gold);
+  }
+
+  .version-description {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .version-description p {
+    margin: 0;
+  }
+</style>

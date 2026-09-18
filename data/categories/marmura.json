@@ -1,5 +1,6 @@
 {
   "category_name": "Marmura",
+  "description": "Piatra rezistenta la zgarieturi. Dispnibila in diverse culori.",
   "image": "/images/uploads/screenshot-2026-09-07_19-43-20.png",
   "items": [
     {
@@ -7,6 +8,7 @@
       "versions": [
         {
           "title": "Alb",
+          "description": "Aceasta este o descriere mai lunga",
           "images": [
             "/images/uploads/screenshot-2026-09-07_21-56-13.png",
             "/images/uploads/screenshot-2026-09-14_16-56-52.png"

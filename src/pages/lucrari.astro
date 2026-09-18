@@ -1,0 +1,79 @@
+---
+import Baselayout from '../layouts/Baselayout.astro';
+import type { Project } from '../types/types.ts';
+import projectsData from '../../data/projects.json';
+
+interface ProjectFile {
+  projects?: Project[];
+}
+
+const data = projectsData as ProjectFile;
+const projects = data?.projects ?? [];
+---
+
+<Baselayout pageTitle={"Lucrări realizate"}>
+  <div class="category-header-wrapper">
+
+    <header class="category-header">
+      <div class="accent-bar" aria-hidden="true"></div>
+      <div class="header-text">
+        <h1 class="category-title">Lucrări realizate</h1>
+        <p class="category-description">de Elvida Stone</p>
+      </div>
+    </header>
+  </div>
+
+  {projects.map((p) => (
+    <section>
+      {p.images?.map((image) => (
+        <img src={image} />
+      ))}
+    </section>
+  ))}
+</Baselayout>
+
+<style>
+  .category-header-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .accent-bar {
+    width: 3.5px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #d4af37 0%, #b8860b 100%);
+    flex-shrink: 0;
+  }
+
+  .header-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .category-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .category-description {
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 75ch;
+  }
+</style>

@@ -18,6 +18,7 @@ collections:
     identifier_field: "category_name"
     fields:
       - {name: "category_name", label: "Numele categoriei", widget: "string"}
+      - {name: "description", label: "Descrierea categoriei", widget: "string"}
       - {name: "image", label: "Poza categoriei", widget: "image"}
       - name: "items"
         label: "Produse"
@@ -30,9 +31,29 @@ collections:
             widget: "list"
             fields:
               - {name: "title", label: "Nume varianta", widget: "string"}
+              - {name: "description", label: "Descriere", widget: "text"}
               - name: "images"
                 label: "Poze"
                 widget: "list"
                 required: false
                 field: {name: "image", label: "poza", widget: "image"}
+
+  - name: "projects-category"
+    label: "Lucrari"
+    files:
+      - name: "projects-file"
+        label: "Lucrari"
+        file: "data/projects.json"
+        fields:
+        - name: "projects"
+          label: "Lista lucrari"
+          widget: "list"
+          fields:
+            - name: "images"
+              label: "poze"
+              widget: "list"
+              field:
+                name: "image"
+                label: "poza"
+                widget: "image"
 

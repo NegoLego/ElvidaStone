@@ -1,31 +1,92 @@
 ---
 import Baselayout from '../layouts/Baselayout.astro';
 import CardContainer from '../components/CardContainer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import type { Category } from '../types/types.ts';
 import { getSlug } from '../utils/utils';
 
 export function getStaticPaths() {
-  const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', {eager: true});
-  
+  const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', { eager: true });
+
   return Object.entries(categoryFiles).map(([path, category]) => {
     const slug = path.split('/').pop()?.replace('.json', '') ?? '';
 
     return {
-      params: {category: slug},
+      params: { category: slug },
       props: {
         categoryName: category.category_name,
-        products: category.items.map(product => ({title: product.title, image: product.versions[0].images[0], link: getSlug(product.title + '_' + product.versions[0].title)}))
-      }
-    }
+        description: category.description,
+        products: category.items.map((product) => ({
+          title: product.title,
+          image: product.versions[0].images[0],
+          link: getSlug(product.title + '_' + product.versions[0].title),
+        })),
+      },
+    };
   });
 }
 
-const { products, categoryName } = Astro.props;
+const { categoryName, description, products } = Astro.props;
 ---
 
 <Baselayout pageTitle={categoryName}>
-  <main>
-  
-    <CardContainer items={products} />
-  </main>
+  <div class="category-header-wrapper">
+    <Breadcrumbs destination={categoryName} />
+
+    <header class="category-header">
+      <div class="accent-bar" aria-hidden="true"></div>
+      <div class="header-text">
+        <h1 class="category-title">{categoryName}</h1>
+        {description && <p class="category-description">{description}</p>}
+      </div>
+    </header>
+  </div>
+
+  <CardContainer items={products} />
 </Baselayout>
+
+<style>
+  .category-header-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .accent-bar {
+    width: 3.5px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #d4af37 0%, #b8860b 100%);
+    flex-shrink: 0;
+  }
+
+  .header-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .category-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .category-description {
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 75ch;
+  }
+</style>
