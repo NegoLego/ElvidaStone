@@ -6,7 +6,7 @@ backend:
   auth_endpoint: api/auth
 
 # where files uploaded via the CMS are saved in your repo
-media_folder: "images/uploads"
+media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
