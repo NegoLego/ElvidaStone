@@ -1,0 +1,46 @@
+---
+import Baselayout from "../layouts/Baselayout.astro";
+import type { Category } from '../types/types';
+import { getSlug } from '../utils/utils';
+
+export function getStaticPaths() {
+  const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', { eager: true });
+
+  return Object.values(categoryFiles).flatMap(category =>
+    category.items.flatMap(item =>
+      item.versions.map(version => ({
+        params: {
+          product: getSlug(item.title),
+          version: getSlug(version.title),
+        },
+        props: {
+          categoryName: category.category_name,
+          productName: item.title,
+          versionName: version.title,
+          images: version.images,
+          productVersions: item.versions.map(v => getSlug(v.title)),
+          versionsImages: item.versions.map(v => v.images[0]),
+        },
+      }))
+    )
+  );
+}
+
+const { categoryName, productName, versionName, images } = Astro.props;
+---
+
+
+
+<Baselayout pageTitle={productName + ' - ' + versionName}>
+  <main>
+    <p>
+      You are in category: {categoryName}.
+    </p>
+    <div>
+    {(images as string[]).map(image => (
+      <img src={image} />
+    ))} 
+    </div>
+  </main>
+</Baselayout>
+

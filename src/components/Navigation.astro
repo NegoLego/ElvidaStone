@@ -1,5 +1,268 @@
-<nav>
-  <a href="/lucrari">Lucarari</a>
-  <a href="/">Acasa</a>
-</nav>
+---
+interface NavItem {
+  label: string;
+  href: string;
+}
 
+const navItems: NavItem[] = [
+  { label: "Categorii produse", href: "/" },
+  { label: "Lucrari", href: "/lucrari" },
+];
+---
+
+<header class="header">
+  <div class="nav-container">
+    <!-- Brand / Logo -->
+    <a href="/" class="brand">
+      <span class="brand-title">ELVIDA</span>
+      <span class="brand-subtitle">STONE</span>
+    </a>
+
+    <!-- Hamburger Toggle Button (Mobile only) -->
+    <button
+      id="menu-toggle"
+      class="menu-toggle"
+      aria-label="Deschide meniul"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Nav Menu -->
+    <nav id="nav-menu" class="nav-menu">
+      <ul class="nav-links">
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="nav-link">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="nav-cta">
+        <a href="/contact#oferta" class="cta-button">Solicită ofertă</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Brand / Logo Styling */
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+
+  .brand-title {
+    font-family: serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+  }
+
+  .brand-subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  /* Desktop Menu */
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.75rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: #333333;
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: #000000;
+  }
+
+  /* CTA Button */
+  .cta-button {
+    display: inline-block;
+    padding: 0.65rem 1.3rem;
+    background-color: #2b302c;
+    color: #e5e5cb;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .cta-button:hover {
+    background-color: #1f2320;
+  }
+
+  /* Hamburger Button */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 1.8rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .menu-toggle .bar {
+    width: 100%;
+    height: 2px;
+    background-color: #222;
+    border-radius: 2px;
+    transition: all 0.25s ease-in-out;
+  }
+
+  /* Mobile Breakpoint */
+  @media (max-width: 860px) {
+    .menu-toggle {
+      display: flex;
+    }
+
+    .nav-menu {
+      display: none;
+      position: absolute;
+      box-sizing: border-box;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1.5rem 2rem 2rem;
+      gap: 1.5rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-menu.is-open {
+      display: flex;
+    }
+
+    .nav-links {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .nav-link {
+      font-size: 1.05rem;
+      display: block;
+      width: 100%;
+    }
+
+    .nav-cta {
+      width: 100%;
+      padding-top: 0.5rem;
+    }
+
+    .cta-button {
+      display: block;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Transform burger into an 'X' when active */
+    .menu-toggle.is-active .bar:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+    .menu-toggle.is-active .bar:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-toggle.is-active .bar:nth-child(3) {
+      transform: translateY(-10px) rotate(-45deg);
+    }
+  }
+</style>
+
+<script>
+  function setupNav() {
+    const toggleBtn = document.getElementById("menu-toggle");
+    const menu = document.getElementById("nav-menu");
+
+    if (!toggleBtn || !menu) return;
+
+    toggleBtn.addEventListener("click", () => {
+      const isOpen = menu.classList.toggle("is-open");
+      toggleBtn.classList.toggle("is-active", isOpen);
+      toggleBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        !menu.contains(e.target as Node) &&
+        !toggleBtn.contains(e.target as Node)
+      ) {
+        menu.classList.remove("is-open");
+        toggleBtn.classList.remove("is-active");
+        toggleBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    // Close when pressing Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.classList.contains("is-open")) {
+        menu.classList.remove("is-open");
+        toggleBtn.classList.remove("is-active");
+        toggleBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  // Runs on first load
+  setupNav();
+
+  // If you use View Transitions (<ClientRouter /> or <ViewTransitions />),
+  // re-bind listeners on navigation
+  document.addEventListener("astro:page-load", setupNav);
+</script>

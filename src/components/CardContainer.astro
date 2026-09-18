@@ -1,31 +1,132 @@
 ---
 interface Item {
-  title: string,
-  image: string,
-  link: string
+  title: string;
+  image: string;
+  link: string;
 }
 
 interface Props {
-  items: Item[]
+  items: Item[];
+  title?: string;
 }
 
-const { items } = Astro.props as Props; // HAS: title, image, link
+const { items, title } = Astro.props as Props;
 ---
 
-<div class="container">
-  {items.map(item => (
-    <div class="card">
-      <a href={item.link}>{item.title}</a>
-      <img src={item.image} />
-    </div>
-  ))}
-</div>
+<section class="section">
+  {title && <h2 class="section-title">{title}</h2>}
+
+  <div class="card-grid">
+    {
+      items.map((item) => (
+        /* Static wrapper intercepts hover to prevent jitter */
+        <div class="card-anchor">
+          <a href={item.link} class="card">
+            <div class="image-wrapper">
+              <img src={item.image} alt={item.title} class="card-image" />
+            </div>
+            <div class="title-wrapper">
+              <h3 class="card-title">{item.title}</h3>
+            </div>
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</section>
 
 <style>
-  .container {
-    display: flex;
+  .section {
+    position: relative;
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: white;
+    z-index: 1;
   }
+
+  .section-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 2rem;
+    margin-top: 0;
+  }
+
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  /* Fixed hit-box that does not move */
+  .card-anchor {
+    position: relative;
+    padding-top: 5px;
+    width: 250px;       /* Set your desired fixed width */
+    max-width: 100%;    /* Prevents overflow on mobile screens smaller than 250px */
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  /* Clickable card body that transforms when the anchor is hovered */
   .card {
-    width: 200px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    background: #f7f7f7;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  /* Hover trigger stays bound to the static parent */
+  .card-anchor:hover .card {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Fixed aspect ratio container for the top picture */
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  /* object-fit: cover crops edges rather than shrinking */
+  .card-image {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Bottom label area */
+  .title-wrapper {
+    padding: 1.25rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    background-color: #ededed;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+    line-height: 1.35;
   }
 </style>

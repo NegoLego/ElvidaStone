@@ -11,9 +11,30 @@ const categories = Object.entries(categoryFiles).map(([path, category]) => ({
 }));
 ---
 
-<Baselayout pageTitle="ElvidaStone">
-  <main>
-    <h1>Onoram memoria cu eleganta</h1>
-    <CardContainer items={categories} />
-  </main>
+<Baselayout pageTitle="Elvida Stone">
+  <>
+    <img src="/images/static/bkgPlaceholder.jpeg" />
+    <h1>Elvida Stone - Onoram memoria cu eleganta</h1>
+    <CardContainer items={categories} title='Categoriile noastre' />
+  </>
 </Baselayout>
+
+<style>
+img {
+  position: absolute;
+  width: 100%;
+  min-height: 25em;
+  z-index: 0;
+  object-fit: cover;
+}
+h1 {
+  position: relative;
+  color: white;
+  z-index: 1;
+  margin: 3em;
+  text-align: center;
+  font-family: serif;
+  font-weight: 100;
+  text-shadow: 0 0 10px black;
+}
+</style>

@@ -1,17 +1,8 @@
 ---
 import Baselayout from '../layouts/Baselayout.astro';
 import CardContainer from '../components/CardContainer.astro';
-
-interface Category {
-  category_name: string,
-  items: {
-    title: string,
-    versions: {
-      title: string,
-      images: string[]
-    }[]
-  }[]
-}
+import type { Category } from '../types/types.ts';
+import { getSlug } from '../utils/utils';
 
 export function getStaticPaths() {
   const categoryFiles = import.meta.glob<Category>('../../data/categories/*.json', {eager: true});
@@ -21,18 +12,20 @@ export function getStaticPaths() {
 
     return {
       params: {category: slug},
-      props: {products: category.items.map(product => ({title: product.title, image: product.versions[0].images[0], link: slug}))}
+      props: {
+        categoryName: category.category_name,
+        products: category.items.map(product => ({title: product.title, image: product.versions[0].images[0], link: getSlug(product.title + '_' + product.versions[0].title)}))
+      }
     }
   });
 }
 
-const { category } = Astro.params;
-const { products } = Astro.props;
+const { products, categoryName } = Astro.props;
 ---
 
-<Baselayout pageTitle={category.title}>
+<Baselayout pageTitle={categoryName}>
   <main>
   
-  <CardContainer items={products} />
+    <CardContainer items={products} />
   </main>
 </Baselayout>
