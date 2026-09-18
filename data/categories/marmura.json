@@ -8,10 +8,20 @@
         {
           "title": "Alb",
           "images": [
-            "/images/uploads/screenshot-2026-09-07_21-56-13.png"
+            "/images/uploads/screenshot-2026-09-07_21-56-13.png",
+            "/images/uploads/screenshot-2026-09-14_16-56-52.png"
+          ],
+          "description": "Dimensiune: 50cm\nPret: 50 lei"
+        },
+        {
+          "title": "Negru",
+          "description": "Dimensiune: 50cm\nPret: 50 lei",
+          "images": [
+            "/images/uploads/screenshot-2026-09-08_23-50-23.png"
           ]
         }
       ]
     }
-  ]
+  ],
+  "description": "Descrierea completa a categoriei"
 }
