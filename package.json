@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/NegoLego/ElvidaStone#readme",
   "dependencies": {
-    "astro": "^7.3.2"
+    "astro": "^7.3.2",
+    "marked": "^18.0.13"
   },
   "devDependencies": {
     "prettier": "^3.9.8",

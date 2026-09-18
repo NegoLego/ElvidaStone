@@ -3,6 +3,7 @@ import Baselayout from "../layouts/Baselayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import type { Category } from '../types/types';
 import { getSlug } from '../utils/utils';
+import { marked } from "marked";
 
 interface Version {
   title: string,
@@ -118,9 +119,7 @@ const {
           <div class="divider"></div>
 
           {versionDescription && (
-            <div class="version-description">
-              <p>{versionDescription}</p>
-            </div>
+          <div class="version-description" set:html={marked.parse(versionDescription)}/>
           )}
         </section>
       </div>
