@@ -160,6 +160,9 @@ const navItems: NavItem[] = [
     border-radius: 2px;
     opacity: 1;
     transition: all 0.25s ease-in-out;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
   /* Mobile Breakpoint */
@@ -218,6 +221,7 @@ const navItems: NavItem[] = [
     }
     .menu-toggle.is-active .bar:nth-child(2) {
       opacity: 0;
+      transform: scaleX(0);
     }
     .menu-toggle.is-active .bar:nth-child(3) {
       transform: translateY(-10px) rotate(-45deg);
