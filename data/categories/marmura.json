@@ -3,16 +3,15 @@
   "image": "/images/uploads/screenshot-2026-09-07_19-43-20.png",
   "items": [
     {
-      "title": "Lumanare",
+      "title": "Cruce",
       "versions": [
         {
           "title": "Alb",
-          "description": "Aceasta este o descriere mai lunga",
+          "description": "**Dimensiune**: 50cm\n\n\n**Pret**: 50 lei",
           "images": [
-            "/images/uploads/screenshot-2026-09-07_21-56-13.png",
+            "/images/uploads/images.jpg",
             "/images/uploads/screenshot-2026-09-14_16-56-52.png"
-          ],
-          "description": "Dimensiune: 50cm\nPret: 50 lei"
+          ]
         },
         {
           "title": "Negru",
